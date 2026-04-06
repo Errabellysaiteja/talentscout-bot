@@ -5,26 +5,32 @@ To run this application locally on your machine, follow these steps:
 
 Clone the repository:
 
-Bash```
+```bash
 git clone https://github.com/Errabellysaiteja/talentscout-bot.git
 cd talentscout-bot
-Set up a virtual environment (Recommended):
 ```
-Bash
+
+Set up a virtual environment (Recommended):
+```bash
 python -m venv venv
 source venv/bin/activate  # On Windows use: venv\Scripts\activate
+```
+
+
 Install the required dependencies:
-```
-Bash
+```bash
 pip install -r requirements.txt
-Configure Environment Variables:
-Create a .env file in the root directory and add your Mistral API key:
 ```
+Configure Environment Variables:
+
+Create a .env file in the root directory and add your Mistral API key:
+```bash
 Code snippet
 MISTRAL_API_KEY=your_api_key_here
-Run the application:
 ```
-Bash
+Run the application:
+
+```bash
 streamlit run app.py
 ```
 📖 Usage Guide
