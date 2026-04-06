@@ -5,7 +5,7 @@ To run this application locally on your machine, follow these steps:
 
 Clone the repository:
 
-Bash
+Bash```
 git clone https://github.com/Errabellysaiteja/talentscout-bot.git
 cd talentscout-bot
 Set up a virtual environment (Recommended):
