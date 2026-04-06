@@ -20,19 +20,30 @@ def ask_llm(prompt):
     return response.choices[0].message.content
 
 def ask_llm_with_context(streamlit_messages):
-    """Passes the entire conversation history to Mistral to maintain context."""
+    """Passes the entire conversation history to Mistral to maintain context and enforce interview rules."""
     mistral_messages = []
     
-    # Inject a system prompt so the AI knows how to behave during the Q&A
-    system_instruction = "You are TalentScout, a technical interviewer. Evaluate the candidate's answers briefly, be encouraging, and answer any follow-up questions they have about the role."
-    mistral_messages.append(ChatMessage(role="system", content=system_instruction))
+    # 1. The updated security guardrail system prompt
+    system_instruction = """
+    You are TalentScout, a technical interviewer. Your job is to evaluate the candidate's answers.
+
+    CRITICAL RULES:
+    1. You must NOT write code, solve problems, or give direct answers to the user.
+    2. If the user asks you to write code (e.g., "write a python script to reverse a string") or answer a technical question, politely refuse. 
+    3. Remind them that this is an interview and you are here to evaluate THEIR skills, not the other way around.
+    4. You may offer a very small hint if they are struggling, but force them to do the work.
+    5. Evaluate their answers briefly, be encouraging, and answer any follow-up questions they have about the recruitment process.
+    """
     
-    # Convert Streamlit history into Mistral format
+    # 2. Using the new v1.0 dict syntax instead of ChatMessage
+    mistral_messages.append({"role": "system", "content": system_instruction})
+    
+    # Convert Streamlit history into Mistral format (v1.0 syntax)
     for msg in streamlit_messages:
-        # Streamlit roles are 'user' or 'assistant', which match Mistral perfectly
-        mistral_messages.append(ChatMessage(role=msg["role"], content=msg["content"]))
+        mistral_messages.append({"role": msg["role"], "content": msg["content"]})
         
-    response = client.chat(
+    # Using the new client.chat.complete method
+    response = client.chat.complete(
         model="mistral-small-latest",
         messages=mistral_messages
     )
